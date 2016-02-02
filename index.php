@@ -1,7 +1,7 @@
 <?php
 
 $host = $_SERVER['HTTP_HOST'];
-$main_page = 'http://' . $host . '/PHP project 1/main.php';
+$main_page = 'http://' . $host . '/main.php';
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
 	$username = htmlentities($_POST['username']);
