@@ -22,7 +22,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
 <center>
 	<br>
-	Acces to the features provided by this site is limited to only those with valid credentials.
+	Access to the features provided by this site is limited to only those with valid credentials.
 	<br>
 	<br>
 	<br>
