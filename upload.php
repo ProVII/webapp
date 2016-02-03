@@ -3,6 +3,7 @@ $target_dir = "uploads/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+
 // Check if image file is a actual image or fake image
 if (isset($_POST["submit"]) && $_POST["submit"] != null) {
     $check = @getimagesize($_FILES["fileToUpload"]["tmp_name"]);
@@ -52,158 +53,7 @@ if ($uploadOk == 0) {
 }
 
 list($width_original, $height_original) = getimagesize($target_file);
-// Ensure image size is not too large
-
-if ($imageFileType == "jpg" || $imageFileType == "jpeg") {
-    switch (buttonPressed()) {
-        case 'grayscale' :
-            echo buttonPressed();
-            $image = imagecreatefromjpeg($target_file);
-            imagefilter($image, IMG_FILTER_GRAYSCALE);
-            imagejpeg($image, 'img_filter_grayscale' . basename($_FILES["fileToUpload"]["name"]) . '.jpg');
-            imagedestroy($image);
-            break;
-
-        case 'edgedetect' :
-            $image = imagecreatefromjpeg($target_file);
-            imagefilter($image, IMG_FILTER_EDGEDETECT);
-            imagejpeg($image, 'img_filter_edgedetect' . basename($_FILES["fileToUpload"]["name"]) . '.jpg');
-            imagedestroy($image);
-            break;
-
-        case 'emboss' :
-            $image = imagecreatefromjpeg($target_file);
-            imagefilter($image, IMG_FILTER_EMBOSS);
-            imagejpeg($image, 'img_filter_emboss' . basename($_FILES["fileToUpload"]["name"]) . '.jpg');
-            imagedestroy($image);
-            break;
-
-        case 'mean_removal' :
-            $image = imagecreatefromjpeg($target_file);
-            imagefilter($image, IMG_FILTER_MEAN_REMOVAL);
-            imagejpeg($image, 'img_filter_mean_removal' . basename($_FILES["fileToUpload"]["name"]) . '.jpg');
-            imagedestroy($image);
-            break;
-
-        case 'negate' :
-            $image = imagecreatefromjpeg($target_file);
-            imagefilter($image, IMG_FILTER_NEGATE);
-            imagejpeg($image, 'img_filter_negate' . basename($_FILES["fileToUpload"]["name"]) . '.jpg');
-            imagedestroy($image);
-            break;
-
-        case 'sepia' :
-            $image = imagecreatefromjpeg($target_file);
-            imagefilter($image, IMG_FILTER_GRAYSCALE);
-            imagefilter($image, IMG_FILTER_COLORIZE, 100, 50, 0);
-            imagejpeg($image, 'sepia_100_50_0' . basename($_FILES["fileToUpload"]["name"]) . '.jpg');
-            imagedestroy($image);
-            break;
-
-        default :
-            echo '<br>' . buttonPressed();
-            checkImage();
-            break;
-    }
-} else if ($imageFileType == "png") {
-    switch (buttonPressed()) {
-        case 'grayscale' :
-            $image = imagecreatefrompng($target_file);
-            imagefilter($image, IMG_FILTER_GRAYSCALE);
-            imagepng($image, 'img_filter_grayscale' . basename($_FILES["fileToUpload"]["name"]) . '.png');
-            imagedestroy($image);
-            break;
-
-        case 'edgedetect' :
-            $image = imagecreatefrompng($target_file);
-            imagefilter($image, IMG_FILTER_EDGEDETECT);
-            imagepng($image, 'img_filter_edgedetect' . basename($_FILES["fileToUpload"]["name"]) . '.png');
-            imagedestroy($image);
-            break;
-
-        case 'emboss' :
-            $image = imagecreatefrompng($target_file);
-            imagefilter($image, IMG_FILTER_EMBOSS);
-            imagepng($image, 'img_filter_emboss' . basename($_FILES["fileToUpload"]["name"]) . '.png');
-            imagedestroy($image);
-            break;
-
-        case 'mean_removal' :
-            $image = imagecreatefrompng($target_file);
-            imagefilter($image, IMG_FILTER_MEAN_REMOVAL);
-            imagepng($image, 'img_filter_mean_removal' . basename($_FILES["fileToUpload"]["name"]) . '.png');
-            imagedestroy($image);
-            break;
-
-        case 'negate' :
-            $image = imagecreatefrompng($target_file);
-            imagefilter($image, IMG_FILTER_NEGATE);
-            imagepng($image, 'img_filter_negate' . basename($_FILES["fileToUpload"]["name"]) . '.png');
-            imagedestroy($image);
-            break;
-
-        case 'sepia' :
-            $image = imagecreatefrompng($target_file);
-            imagefilter($image, IMG_FILTER_GRAYSCALE);
-            imagefilter($image, IMG_FILTER_COLORIZE, 100, 50, 0);
-            imagepng($image, 'sepia_100_50_0' . basename($_FILES["fileToUpload"]["name"]) . '.png');
-            imagedestroy($image);
-            break;
-
-        default :
-            checkImage();
-            break;
-    }
-} else if ($imageFileType == "gif") {
-    switch (buttonPressed()) {
-        case 'grayscale' :
-            $image = imagecreatefromgif($target_file);
-            imagefilter($image, IMG_FILTER_GRAYSCALE);
-            imagegif($image, 'img_filter_grayscale' . basename($_FILES["fileToUpload"]["name"]) . '.gif');
-            imagedestroy($image);
-            break;
-
-        case 'edgedetect' :
-            $image = imagecreatefromgif($target_file);
-            imagefilter($image, IMG_FILTER_EDGEDETECT);
-            imagegif($image, 'img_filter_edgedetect' . basename($_FILES["fileToUpload"]["name"]) . '.gif');
-            imagedestroy($image);
-            break;
-
-        case 'emboss' :
-            $image = imagecreatefromgif($target_file);
-            imagefilter($image, IMG_FILTER_EMBOSS);
-            imagegif($image, 'img_filter_emboss' . basename($_FILES["fileToUpload"]["name"]) . '.gif');
-            imagedestroy($image);
-            break;
-
-        case 'mean_removal' :
-            $image = imagecreatefromgif($target_file);
-            imagefilter($image, IMG_FILTER_MEAN_REMOVAL);
-            imagegif($image, 'img_filter_mean_removal' . basename($_FILES["fileToUpload"]["name"]) . '.gif');
-            imagedestroy($image);
-            break;
-
-        case 'negate' :
-            $image = imagecreatefromgif($target_file);
-            imagefilter($image, IMG_FILTER_NEGATE);
-            imagegif($image, 'img_filter_negate' . basename($_FILES["fileToUpload"]["name"]) . '.gif');
-            imagedestroy($image);
-            break;
-
-        case 'sepia' :
-            $image = imagecreatefromgif($target_file);
-            imagefilter($image, IMG_FILTER_GRAYSCALE);
-            imagefilter($image, IMG_FILTER_COLORIZE, 100, 50, 0);
-            imagegif($image, 'sepia_100_50_0' . basename($_FILES["fileToUpload"]["name"]) . '.gif');
-            imagedestroy($image);
-            break;
-
-        default :
-            checkImage();
-            break;
-    }
-}
+checkImage();
 
 // Prints out the correct size of the image
 function checkImage() {
@@ -233,49 +83,58 @@ function printImage($width, $height) {
 	this.height='$height';this.width='$width'\" /></center>";
 }
 
-function buttonPressed() {
-    if (isset($_POST["grayscale"])) {
-        return 'grayscale';
-    } else if (isset($_POST["edgedetect"])) {
-        return 'edgedetect';
-    } else if (isset($_POST["emboss"])) {
-        return 'emboss';
-    } else if (isset($_POST["mean_removal"])) {
-        return 'mean_removal';
-    } else if (isset($_POST["negate"])) {
-        return 'negate';
-    } else if (isset($_POST["sepia"])) {
-        return 'sepia';
-    } else {
-        return 'not_found';
-    }
+if (isset($_POST["try_another_filter"])) {
+        $image_file = $_POST['image_file'];
+        unlink($image_file);
 }
 ?>
-<script>
-var button = document.getElementById("submit");
-
-button.addEventListener("click" ajaxFunction, false);
-
-var ajaxFunction = function () {
-    echo buttonPressed();
-    $image = imagecreatefromjpeg($target_file);
-    imagefilter($image, IMG_FILTER_GRAYSCALE);
-    imagejpeg($image, 'img_filter_grayscale'.basename($_FILES["fileToUpload"]["name"]).'.jpg');
-    imagedestroy($image);
-}
-</script>
 
 <br>
 <br>
-<center>
-<input name "grayscale" type="button" id="submit" value="Grayscale" />
-<input name "edgedetect" type="button" id="submit" value="EdgeDetect" />
-<input name "emboss" type="button" id="submit" value="EMBOSS" />
-<input name "mean_removal" type="button" id="submit" value="Mean Removal" />
-<input name "negate" type="button" id="submit" value="Negate" />
-<input name "sepia" type="button" id="submit" value="Sepia" />
+<center><form action="image_filter.php" method="POST">
+<input type="submit" name "grayscale" value="Grayscale" />
+<input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
+<input type="hidden" name="image_file_type" value="<?php echo $imageFileType ?>" />
+<input type="hidden" name="filename" value="<?php echo basename($_FILES["fileToUpload"]["name"]) ?>" />
+<input type="hidden" name="grayscale" value="gray" />
+</form>
+<form action="image_filter.php" method="POST">
+<input name "edgedetect" type="submit" id="submit" value="EdgeDetect" />
+<input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
+<input type="hidden" name="image_file_type" value="<?php echo $imageFileType ?>" />
+<input type="hidden" name="filename" value="<?php echo basename($_FILES["fileToUpload"]["name"]) ?>" />
+<input type="hidden" name="edgedetect" value="edge" />
+</form>
+<form action="image_filter.php" method="POST">
+<input name "emboss" type="submit" id="submit" value="EMBOSS" />
+<input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
+<input type="hidden" name="image_file_type" value="<?php echo $imageFileType ?>" />
+<input type="hidden" name="filename" value="<?php echo basename($_FILES["fileToUpload"]["name"]) ?>" />
+<input type="hidden" name="emboss" value="emboss" />
+</form>
+<form action="image_filter.php" method="POST">
+<input name "mean_removal" type="submit" id="submit" value="Mean Removal" />
+<input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
+<input type="hidden" name="image_file_type" value="<?php echo $imageFileType ?>" />
+<input type="hidden" name="filename" value="<?php echo basename($_FILES["fileToUpload"]["name"]) ?>" />
+<input type="hidden" name="mean_removal" value="mean" />
+</form>
+<form action="image_filter.php" method="POST">
+<input name "negate" type="submit" id="submit" value="Negate" />
+<input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
+<input type="hidden" name="image_file_type" value="<?php echo $imageFileType ?>" />
+<input type="hidden" name="filename" value="<?php echo basename($_FILES["fileToUpload"]["name"]) ?>" />
+<input type="hidden" name="negate" value="negate" />
+</form>
+<form action="image_filter.php" method="POST">
+<input name "sepia" type="submit" id="submit" value="Sepia" />
+<input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
+<input type="hidden" name="image_file_type" value="<?php echo $imageFileType ?>" />
+<input type="hidden" name="filename" value="<?php echo basename($_FILES["fileToUpload"]["name"]) ?>" />
+<input type="hidden" name="sepia" value="sepia" />
+</form>
 
 <br><form action="main.php" method="POST">
 <input type="submit" name="try_another_image" value="Try Another Image" />
-<input type="hidden" name="target_file" value="<?php echo $target_file ?>">
+<input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
 </form></center>

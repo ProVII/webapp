@@ -4,8 +4,11 @@ if (isset($_SESSION['username'])) {
     echo 'Welcome, ' . $_SESSION['username'];
 
     if (isset($_POST["try_another_image"])) {
-        $target_file = $_POST['target_file'];
-        unlink($target_file);
+        foreach (glob('uploads/*') as $file) {
+            if (basename($file) != '.gitignore.txt')
+                unlink($file);
+            // empties uploads folder after use
+        }
     }
 } else {
     echo 'Please log in to view this page.';
