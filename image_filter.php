@@ -1,13 +1,11 @@
 <?php
 $target_file = $_POST['target_file'];
-echo $target_file;
 $imageFileType = $_POST['image_file_type'];
 $filename = $_POST['filename'];
 
 if ($imageFileType == "jpg" || $imageFileType == "jpeg") {
     switch (buttonPressed()) {
         case 'grayscale' :
-            echo "<br>$target_file";
             $image = imagecreatefromjpeg($target_file);
             imagefilter($image, IMG_FILTER_GRAYSCALE);
             imagejpeg($image, 'uploads/img_filter_grayscale_' . $filename);
