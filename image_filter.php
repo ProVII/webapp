@@ -1,5 +1,5 @@
-<?php
-
+does this work?<br><?php
+echo "testing shit what's up";
 $target_file = $_POST['target_file'];
 $imageFileType = $_POST['image_file_type'];
 $filename = $_POST['filename'];

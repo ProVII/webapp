@@ -6,13 +6,12 @@ use Aws\S3\S3Client;
 
 // Instantiate an Amazon S3 client.
 $s3 = new S3Client([
-    'version' => 'latest',
-    'region'  => 'us-west-2',
-    'http'    => [
-        'verify' => false],
+    'version' => 'latest', 
+    'region' => 'us-west-2', 
+    'http' => ['verify' => false], 
     'credentials' => array(
-    'key' => 'AKIAIS7A7YPIMGFAUTAA',
-    'secret'  => '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'
+        'key' => 'AKIAIS7A7YPIMGFAUTAA', 
+        'secret' => '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'
 )]);
 
 $target_dir = "uploads/";
@@ -30,7 +29,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] != null) {
         echo "File is not an image (or there was no file uploaded).";
         echo '<br><center>
         <form action="main.php" method="POST">
-        <input type="hidden" name="idtoken" value="'.$_POST['idtoken'].'" />
+        <input type="hidden" name="idtoken" value="' . $_POST['idtoken'] . '" />
         <input type="submit" value="Try Another Image" required />
         </form></center>';
         $uploadOk = 0;
@@ -57,24 +56,21 @@ if ($uploadOk == 0) {
     echo " Your file was not uploaded.";
     echo '<br><center>
 	<form action="main.php" method="POST">
-	<input type="hidden" name="idtoken" value="'.$_POST['idtoken'].'" />
+	<input type="hidden" name="idtoken" value="' . $_POST['idtoken'] . '" />
 	<input type="submit" value="Try Another Image" required />
 	</form></center>';
     die();
     // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        try { // Storing user images on a AWS S3 for permanent storage.
-    $s3->putObject([
-        'Bucket' => 'a1files',
-        'Key'    => 'uploads/'.basename($_FILES["fileToUpload"]["name"]),
-        'Body'   => fopen($target_file, 'r'),
-        'ACL'    => 'public-read',
-    ]);
-} catch (Aws\Exception\S3Exception $e) {
-    echo "There was an error uploading the file to S3.\n";
-    die();
-}
+        try {// Storing user images on a AWS S3 for permanent storage.
+            $s3 -> putObject(['Bucket' => 'a1files', 
+            'Key' => 'uploads/' . basename($_FILES["fileToUpload"]["name"]), 
+            'Body' => fopen($target_file, 'r'), 'ACL' => 'public-read', ]);
+        } catch (Aws\Exception\S3Exception $e) {
+            echo "There was an error uploading the file to S3.\n";
+            die();
+        }
         echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded to S3.";
     } else {
         echo "Sorry, there was an error uploading your file.";
@@ -166,5 +162,5 @@ if (isset($_POST["try_another_filter"])) {
 <br><form action="main.php" method="POST">
 <input type="submit" name="try_another_image" value="Try Another Image" />
 <input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
-<input type="hidden" name="target_file" value="<?php echo $_POST['idtoken'] ?>" />
+<input type="hidden" name="idtoken" value="<?php echo $_POST['idtoken'] ?>" />
 </form></center>
