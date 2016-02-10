@@ -1,5 +1,5 @@
-<?php
-
+what is going on?<?php
+echo "<br>something";
 include 'vendor/autoload.php';
 use Aws\Resource\Aws;
 
