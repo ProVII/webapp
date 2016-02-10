@@ -1,42 +1,58 @@
-<?php
+<html lang="en">
+	<head>
+		<meta name="google-signin-scope" content="profile email">
+		<meta name="google-signin-client_id" content="879359105317-9pk1igs8lu221pddtnlr8j1ar5t2un2r.apps.googleusercontent.com">
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+	</head>
+	<body>
+		<center>
+			<br>
+			Once you have signed in with your Google credentials proceed by clicking 'Let's Go' button.
+			<br>
+			<br>
+			<br>
+			<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+			<script>
+				function onSignIn(googleUser) {
+					// Useful data for your client-side scripts:
+					var profile = googleUser.getBasicProfile();
+					console.log("ID: " + profile.getId());
+					// Don't send this directly to your server!
+					console.log("Name: " + profile.getName());
+					console.log("Image URL: " + profile.getImageUrl());
+					console.log("Email: " + profile.getEmail());
 
-$host = $_SERVER['HTTP_HOST'];
-$main_page = 'http://' . $host . '/main.php';
+					// The ID token you need to pass to your backend:
+					var id_token = googleUser.getAuthResponse().id_token;
+					console.log("ID Token: " + id_token);
 
-if (isset($_POST['username']) && isset($_POST['password'])) {
-	$username = htmlentities($_POST['username']);
-	$password = htmlentities($_POST['password']);
-	if ($username == 'user') {
-		if ($password == 'password') {
-			session_start();
-			$_SESSION['username'] = $username;
-			header('Location: ' . $main_page);
-		} else {
-			echo "no such password found";
-		}
-	} else {
-		echo "no such username found";
-	}
-}
-?>
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', 'main.php');
+					xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+					xhr.onload = function() {
+						console.log('Signed in as: ' + xhr.responseText);
+					};
+					xhr.send('idtoken=' + id_token);
+					document.getElementById('idtoken').value = id_token;
+				};
+			</script>
 
-<center>
-	<br>
-	Access to the features provided by this site is limited to only those with valid credentials.
-	<br>
-	<br>
-	<br>
-	<form action="index.php" method="POST">
-		<DIV TITLE="username is 'user'">
-		Username:</DIV>
-		<input type="text" name="username" required />
-		<br>
-		<br>
-		<DIV TITLE="password is 'password'">
-		Password:</DIV>
-		<input type="password" name="password" required />
-		<br>
-		<br>
-		<input type="submit" value="Login" required />
-	</form>
-</center>
+			<br>
+			<br>
+			<form action="main.php" method="POST">
+			    <input type="hidden" name="idtoken" id="idtoken" value="" />
+				<input type="submit" value="Let's Go" required />
+			</form>
+
+			<a href="#" onclick="signOut();">Sign out from Google</a>
+			<script>
+				function signOut() {
+					var auth2 = gapi.auth2.getAuthInstance();
+					auth2.signOut().then(function() {
+						console.log('User signed out.');
+					});
+				}
+			</script>
+		</center>
+	</body>
+</html>

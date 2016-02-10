@@ -1,4 +1,22 @@
 <?php
+
+require 'vendor/autoload.php';
+use Aws\Resource\Aws;
+
+use Aws\S3\S3Client;
+__DIR__ . 'ca-bundle.crt';
+
+// Instantiate an Amazon S3 client.
+$s3 = new S3Client([
+    'version' => 'latest',
+    'region'  => 'us-west-2',
+    'http'    => [
+        'verify' => false],
+    'credentials' => array(
+    'key' => 'AKIAIS7A7YPIMGFAUTAA',
+    'secret'  => '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'
+)]);
+
 $target_dir = "uploads/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
@@ -14,6 +32,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] != null) {
         echo "File is not an image (or there was no file uploaded).";
         echo '<br><center>
         <form action="main.php" method="POST">
+        <input type="hidden" name="idtoken" value="'.$_POST['idtoken'].'" />
         <input type="submit" value="Try Another Image" required />
         </form></center>';
         $uploadOk = 0;
@@ -40,13 +59,25 @@ if ($uploadOk == 0) {
     echo " Your file was not uploaded.";
     echo '<br><center>
 	<form action="main.php" method="POST">
+	<input type="hidden" name="idtoken" value="'.$_POST['idtoken'].'" />
 	<input type="submit" value="Try Another Image" required />
 	</form></center>';
     die();
     // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
+        try { // Storing user images on a AWS S3 for permanent storage.
+    $s3->putObject([
+        'Bucket' => 'a1files',
+        'Key'    => 'uploads/'.basename($_FILES["fileToUpload"]["name"]),
+        'Body'   => fopen($target_file, 'r'),
+        'ACL'    => 'public-read',
+    ]);
+} catch (Aws\Exception\S3Exception $e) {
+    echo "There was an error uploading the file to S3.\n";
+    die();
+}
+        echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded to S3.";
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
@@ -84,8 +115,8 @@ function printImage($width, $height) {
 }
 
 if (isset($_POST["try_another_filter"])) {
-        $image_file = $_POST['image_file'];
-        unlink($image_file);
+    $image_file = $_POST['image_file'];
+    unlink($image_file);
 }
 ?>
 
@@ -137,4 +168,5 @@ if (isset($_POST["try_another_filter"])) {
 <br><form action="main.php" method="POST">
 <input type="submit" name="try_another_image" value="Try Another Image" />
 <input type="hidden" name="target_file" value="<?php echo $target_file ?>" />
+<input type="hidden" name="target_file" value="<?php echo $_POST['idtoken'] ?>" />
 </form></center>
