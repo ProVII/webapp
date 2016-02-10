@@ -1,10 +1,9 @@
 <?php
 
-require 'vendor/autoload.php';
+include 'vendor/autoload.php';
 use Aws\Resource\Aws;
 
 use Aws\S3\S3Client;
-__DIR__ . 'ca-bundle.crt';
 
 // Instantiate an Amazon S3 client.
 $s3 = new S3Client([
